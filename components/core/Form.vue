@@ -255,7 +255,7 @@ export default {
         try {
           await this.$axios.post(
             '/api/my-user/have-account/',
-            { identifier: this.user.identifier, have: this.logIn }
+            { identifier: this.user.identifier, have: !this.signIn }
           )
           return true
         } catch (error) {
