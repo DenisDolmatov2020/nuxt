@@ -74,7 +74,7 @@ export const actions = {
   },
   initSockets () {
     if (this.$auth.loggedIn) {
-      const prizeSocket = new WebSocket('ws://' + window.location.hostname + ':8000' + '/ws/prize/')
+      const prizeSocket = new WebSocket('ws://' + process.env.WS_URI + '/ws/prize/')
       prizeSocket.onmessage = ({ data }) => {
         const lot = JSON.parse(data)
         setTimeout(() =>
