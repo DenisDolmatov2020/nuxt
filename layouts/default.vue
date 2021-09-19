@@ -34,11 +34,7 @@ export default {
     }
   },
   created () {
-    Promise.all([
-      this.fetchLots(),
-      this.fetchNumbers(),
-      this.fetchPrizes()
-    ])
+    this.initLottee()
     this.timer = setInterval(() => {
       if (this.$auth.loggedIn) {
         this.tracker()
@@ -53,7 +49,14 @@ export default {
     clearInterval(this.timer)
   },
   methods: {
-    ...mapActions(['fetchLots', 'fetchNumbers', 'fetchPrizes', 'tracker', 'initSockets'])
+    ...mapActions(['fetchLots', 'fetchNumbers', 'fetchPrizes', 'tracker', 'initSockets']),
+    initLottee () {
+      Promise.all([
+        this.fetchLots(),
+        this.fetchNumbers(),
+        this.fetchPrizes()
+      ])
+    }
   }
 }
 </script>

@@ -30,16 +30,24 @@ export const actions = {
     }
   },
   async fetchNumbers ({ commit }) {
-    try {
-      const { data } = await this.$axios.get('/api/number/')
-      commit('SET_NUMBERS', data)
-    } catch (error) {
-      console.error(error)
+    if (this.$auth.loggedIn) {
+      try {
+        const { data } = await this.$axios.get('/api/number/')
+        commit('SET_NUMBERS', data)
+      } catch (error) {
+        console.error(error)
+      }
     }
   },
   async fetchPrizes ({ commit }) {
-    const prizes = await this.$axios.$get('/api/prize')
-    commit('SET_PRIZES', prizes)
+    if (this.$auth.loggedIn) {
+      try {
+        const prizes = await this.$axios.$get('/api/prize')
+        commit('SET_PRIZES', prizes)
+      } catch (error) {
+        console.error(error)
+      }
+    }
   },
   async tracker ({ commit }) {
     if (this.$auth.loggedIn) {
@@ -76,14 +84,14 @@ export const actions = {
           5000
         )
 
-        let you = lot.winners.filter(w => w.user === +this.$auth.user.id)
+        const you = lot.winners.filter(w => w.user === +this.$auth.user.id)
         let text = this.$tc('prize.new_message', you.length)
 
         if (you.length) {
           lot.winners = you
           this.$auth.fetchUser()
         }
-        lot.winners.forEach(item => text += ' #' + item.num)
+        lot.winners.forEach(item => { text += ' #' + item.num })
 
         setTimeout(() =>
             this.$root.$emit('snackbar',
