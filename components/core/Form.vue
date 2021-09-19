@@ -4,27 +4,23 @@
     <div class="user-container">
       <div class="content-w3ls">
         <div class="content-bottom">
-          <!-- need change message on snackbar -->
           <div
-            v-if="!!message"
-            :class="`login-first login-first-${message.type}`"
+            v-if="step === 2"
+            class="login-first login-first-primary"
           >
             <div>
-              {{ message.text }}
-            </div>
-            <div v-if="step === 2">
               0{{ Math.floor(timer / 60) }}:{{ `${timer % 60 > 9 ? '' : '0'}${timer % 60}` }}
             </div>
             <button
-              v-if="!!message.link || (step === 2 && !timer_interval)"
+              v-if="!timer_interval"
               class="login-first-link"
               @click="requestLink"
             >
-              {{ step === 2 ? $t('auth.send_again') : message.link }}
+              {{ $t('auth.send_again') }}
             </button>
           </div>
 
-          <div v-if="step !== 2" class="form-buttons">
+          <div v-else class="form-buttons">
             <h2>
               {{ titles[$route.path] }}
             </h2>
@@ -53,7 +49,6 @@
                 type="text"
                 :placeholder="$t('auth.email_or_phone')"
                 required
-                @input="checkValue"
               >
             </div>
           </div>
@@ -159,7 +154,7 @@
             <div
               v-if="step > 1"
               class="forgot-password"
-              @click="step -= 1; message = null"
+              @click="step -= 1;"
             >
               {{ $t('modal.cancel') }}
             </div>
@@ -188,7 +183,6 @@ export default {
         password: '',
         password_repeat: ''
       },
-      message: null,
       show_password: false,
       reg_email: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,24}))$/,
       reg_phone: /^[+]?[(]?[0-9]{3}[)]?[-\s.]?[0-9]{3}[-\s.]?[0-9]{4,6}$/im
@@ -196,14 +190,16 @@ export default {
   },
   computed: {
     isValueValid () {
-      // this.message = null
       if (this.user.identifier) {
         if (this.reg_email.test(this.user.identifier)) {
           return 1
         } else if (this.reg_phone.test(this.user.identifier)) {
           return 2
         }
-        // this.message = { type: 'error', text: this.$t('auth.invalid_account') }
+        this.$root.$emit('snackbar', {
+          color: 'error',
+          text: this.$t('auth.invalid_account'),
+        })
       }
       return 0
     },
@@ -226,7 +222,10 @@ export default {
       if (this.logIn) {
         this.login()
       } else if (this.signIn && this.user.password !== this.user.password_repeat) {
-        this.message = { type: 'error', text: this.$t('auth.password_mismatch'), link: '' }
+        this.$root.$emit('snackbar', {
+          color: 'error',
+          text: this.$t('auth.password_mismatch'),
+        })
       } else if (this.step === 3) {
         this.$emit('final-request', this.user)
       } else if (this.step === 2) {
@@ -244,13 +243,15 @@ export default {
             text: this.$t('auth.logged_in'),
             icon: 'mdi-account-check'
           })
-          this.$store.dispatch('tracker')
-          this.$store.dispatch('initSockets')
         } catch (error) {
-          this.message = { type: 'error', text: this.$t('auth.wrong_data'), link: this.$t('auth.reset') }
+          this.$root.$emit('snackbar', {
+            color: 'error',
+            text: this.$t('auth.wrong_data')
+          })
         }
       }
     },
+    /*
     async checkValue () {
       if (this.isValueValid) {
         try {
@@ -265,10 +266,13 @@ export default {
             text: this.signIn ? this.$t('auth.account_have') : this.$t('auth.no_have_account'),
             link: this.signIn ? this.$t('auth.login') : this.$t('auth.sign_in')
           }
+          this.$t('auth.wrong_data')
         }
       }
       return false
     },
+
+     */
     timerStart () {
       this.timer = process.env.timerTime
       this.timer_interval = setInterval(() => {
@@ -282,25 +286,35 @@ export default {
       }, 1000)
     },
     async getOTP () {
-      if (await this.checkValue()) {
-        try {
-          await this.$axios.post('/api/otp/', this.user)
-          this.step = 2
-          this.timerStart()
-          this.message = { type: 'primary', text: this.$t('auth.sent_code'), link: '' }
-        } catch (error) {
-          this.message = { type: 'error', text: this.$t('auth.have_error'), link: '' }
-        }
+      try {
+        await this.$axios.post('/api/otp/', this.user)
+        this.step = 2
+        this.timerStart()
+        this.$root.$emit('snackbar', {
+          color: 'primary',
+          text: this.$t('auth.send_code')
+        })
+      } catch (error) {
+        this.$root.$emit('snackbar', {
+          color: 'error',
+          text: this.$t('auth.have_error')
+        })
       }
     },
     async sentOTP () {
       if (this.user.code) {
         try {
           await this.$axios.post('/api/otp/verify/', this.user)
-          this.message = { type: 'success', text: this.$t('password.enter_new') }
+          this.$root.$emit('snackbar', {
+            color: 'success',
+            text: this.$t('auth.enter_new')
+          })
           this.step = 3
         } catch (error) {
-          this.message = { type: 'error', text: this.$t('auth.wrong_code') }
+          this.$root.$emit('snackbar', {
+            color: 'error',
+            text: this.$t('auth.wrong_code')
+          })
         }
       }
     }
@@ -345,12 +359,6 @@ export default {
   color: white;
   &-primary {
     background-color: rgba(0, 0, 255, 0.7);
-  }
-  &-success {
-    background-color: rgba(0, 255, 0, 0.7);
-  }
-  &-error {
-    background-color: rgba(255, 0, 0, 0.7);
   }
   &-link {
     text-decoration: underline; opacity: .5; cursor: pointer;

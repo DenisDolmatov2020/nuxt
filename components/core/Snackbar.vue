@@ -65,7 +65,7 @@ export default {
   methods: {
     clickButton () {
       if (this.lot_id) {
-        this.$router.push('/' + this.lot.id)
+        this.$router.push('/' + this.lot_id)
       } else {
         this.snackbar = false
       }

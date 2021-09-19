@@ -171,7 +171,7 @@
       </v-col>
     </v-row>
     <button
-      v-else-if="$auth.loggedIn && $auth.user.id !== lot.user.id"
+      v-else-if="$auth.loggedIn && $auth.user.id !== lot.user.id && lot.active"
       type="button"
       class="btn btn-entry btn-lot"
       @click="reserve()"
@@ -182,7 +182,7 @@
 </template>
 
 <script>
-import {mapState} from "vuex";
+import {mapActions, mapState} from "vuex";
 
 export default {
   name: 'Detail',
@@ -191,22 +191,21 @@ export default {
       lot: null
     }
   },
-  created () {
-    this.fetchLot()
-  },
   computed: {
     ...mapState(['numbers']),
     userNumbers () {
       return this.$auth.loggedIn ? this.numbers.filter(number => number.lot === this.lot.id) : []
     }
   },
+  created () {
+    this.fetchLot()
+  },
   methods: {
+    ...mapActions(['fetchLots']),
     async fetchLot () {
       try {
         const { data } = await this.$axios.get('/api/lot/' + this.$route.params.id)
         this.lot = data
-        // this.$root.$emit('lot', { data })
-        this.$root.$emit('lot-update', data)
       } catch (error) {
         console.error(error)
         this.$router.push('/')
@@ -214,13 +213,14 @@ export default {
     },
     async reserve() {
       try {
-        const response = await this.$axios.patch('/api/number/', { lot_id: this.lot.id })
+        const response = await this.$axios.patch('/api/number/update/', { lot_id: this.lot.id })
         this.$root.$emit('snackbar', {
           text: response.status === 200 ? `Ваш номер #${response.data}` : 'Вам не удалось взять номер',
           color: response.status === 200 ? 'success' : 'error'
         })
         this.$auth.fetchUser()
         this.fetchLot()
+        this.fetchLots()
       } catch (error) {
         this.$root.$emit('snackbar', { icon: 'mdi-flash', color: 'error', text: 'Недостаточно энергии' })
       }
