@@ -2,7 +2,7 @@ import colors from 'vuetify/es5/util/colors'
 
 export default {
   // Disable server-side rendering: https://go.nuxtjs.dev/ssr-mode
-  ssr: false,
+  ssr: true,
 
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
@@ -21,7 +21,10 @@ export default {
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
     ]
   },
+  env: {
+    timerTime: process.env.TIMER_TIME || 30,
 
+  },
   // Global CSS (https://go.nuxtjs.dev/config-css)
   css: [
     '~/assets/css/main.css'
@@ -37,10 +40,10 @@ export default {
 
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
   buildModules: [
-    // https://go.nuxtjs.dev/eslint
-    '@nuxtjs/eslint-module',
     // https://go.nuxtjs.dev/vuetify
     '@nuxtjs/vuetify',
+    // https://go.nuxtjs.dev/eslint
+    '@nuxtjs/eslint-module',
     '@nuxtjs/dotenv'
   ],
 

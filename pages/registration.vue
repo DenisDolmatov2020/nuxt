@@ -26,8 +26,8 @@ export default {
         await this.$axios.post('/api/my-user/create/', user)
         this.$root.$emit('snackbar', { color: 'success', text: this.$t('auth.account_created') })
         await this.$auth.loginWith('local', { data: user })
-        this.$store.dispatch('track/trackerTimer')
-        this.$router.push('/')
+        this.$store.dispatch('tracker')
+        this.$store.dispatch('initSockets')
       } catch (error) {
         this.$root.$emit('snackbar', { color: 'success', text: this.$t('auth.have_error') })
         console.log(error)

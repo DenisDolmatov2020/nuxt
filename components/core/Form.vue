@@ -245,6 +245,7 @@ export default {
             icon: 'mdi-account-check'
           })
           this.$store.dispatch('tracker')
+          this.$store.dispatch('initSockets')
         } catch (error) {
           this.message = { type: 'error', text: this.$t('auth.wrong_data'), link: this.$t('auth.reset') }
         }
