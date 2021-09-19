@@ -191,19 +191,19 @@ export default {
       message: null,
       show_password: false,
       reg_email: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,24}))$/,
-      reg_phone: /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im
+      reg_phone: /^[+]?[(]?[0-9]{3}[)]?[-\s.]?[0-9]{3}[-\s.]?[0-9]{4,6}$/im
     }
   },
   computed: {
     isValueValid () {
-      this.message = null
+      // this.message = null
       if (this.user.identifier) {
         if (this.reg_email.test(this.user.identifier)) {
           return 1
         } else if (this.reg_phone.test(this.user.identifier)) {
           return 2
         }
-        this.message = { type: 'error', text: this.$t('auth.invalid_account') }
+        // this.message = { type: 'error', text: this.$t('auth.invalid_account') }
       }
       return 0
     },
@@ -240,7 +240,7 @@ export default {
         try {
           await this.$auth.loginWith('local', { data: this.user })
           this.$root.$emit('snackbar', { color: 'success', text: this.$t('auth.logged_in') })
-          this.$store.dispatch('track/trackerTimer')
+          this.$store.dispatch('tracker')
           this.$router.push('/')
         } catch (error) {
           this.message = { type: 'error', text: this.$t('auth.wrong_data'), link: this.$t('auth.reset') }

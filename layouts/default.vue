@@ -39,7 +39,11 @@ export default {
       this.fetchNumbers(),
       this.fetchPrizes()
     ])
-    this.timer = setInterval(() => this.tracker, 60 * 60 * 1000) // каждую минуту
+    this.timer = setInterval(() => {
+      if (this.$auth.loggedIn) {
+        this.tracker()
+      }
+    }, 60 * 60 * 1000) // каждую минуту
   },
   mounted () {
     this.initSockets()
