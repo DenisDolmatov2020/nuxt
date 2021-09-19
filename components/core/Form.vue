@@ -239,9 +239,12 @@ export default {
       if (this.isValueValid) {
         try {
           await this.$auth.loginWith('local', { data: this.user })
-          this.$root.$emit('snackbar', { color: 'success', text: this.$t('auth.logged_in') })
+          this.$root.$emit('snackbar', {
+            color: 'success',
+            text: this.$t('auth.logged_in'),
+            icon: 'mdi-account-check'
+          })
           this.$store.dispatch('tracker')
-          this.$router.push('/')
         } catch (error) {
           this.message = { type: 'error', text: this.$t('auth.wrong_data'), link: this.$t('auth.reset') }
         }

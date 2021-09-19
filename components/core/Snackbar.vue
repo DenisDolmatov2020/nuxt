@@ -55,8 +55,7 @@ export default {
     this.$root.$on('snackbar', payload => {
       this.timeout = payload.timeout || 3500
       this.color = payload.color || 'primary'
-      this.icon = payload.icon ?
-        payload.icon : this.color === 'error' ? 'mdi-tooltip-remove-outline' : 'mdi-check-box-multiple-outline'
+      this.icon = payload.icon || (this.color === 'error' ? 'mdi-tooltip-remove-outline' : 'mdi-checkbox-multiple-marked')
       this.title = payload.title || ''
       this.text = payload.text || ''
       this.lot_id = payload.lot_id || null
