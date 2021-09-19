@@ -2,7 +2,7 @@ import colors from 'vuetify/es5/util/colors'
 
 export default {
   // Disable server-side rendering: https://go.nuxtjs.dev/ssr-mode
-  ssr: true,
+  ssr: false,
 
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
@@ -22,8 +22,7 @@ export default {
     ]
   },
   env: {
-    timerTime: process.env.TIMER_TIME || 30,
-
+    timerTime: process.env.TIMER_TIME || 30
   },
   // Global CSS (https://go.nuxtjs.dev/config-css)
   css: [
