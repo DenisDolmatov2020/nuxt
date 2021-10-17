@@ -45,6 +45,7 @@
               <input
                 v-model="user.identifier"
                 :disabled="step === 2"
+                :class="{ invalid: !isValueValid && user.identifier.length }"
                 name="email or phone"
                 type="text"
                 :placeholder="$t('auth.email_or_phone')"
@@ -196,10 +197,6 @@ export default {
         } else if (this.reg_phone.test(this.user.identifier)) {
           return 2
         }
-        this.$root.$emit('snackbar', {
-          color: 'error',
-          text: this.$t('auth.invalid_account'),
-        })
       }
       return 0
     },
@@ -559,6 +556,9 @@ h5 {
       outline: none;
       border-top-right-radius: 30px;
       border-bottom-right-radius: 30px;
+    }
+    .invalid {
+      border: 2px solid red
     }
   }
 }

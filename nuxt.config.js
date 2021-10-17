@@ -18,7 +18,7 @@ export default {
       { name: 'format-detection', content: 'telephone=no' }
     ],
     link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
+      { rel: 'icon', type: 'image/x-icon', href: '/favicon.png' }
     ]
   },
   env: {
@@ -148,7 +148,7 @@ export default {
             no_have_user: 'No have such account', // 'Нет пользователя с таким адресом'
             wrong_code: 'Wrong code',
             code: 'Enter code',
-            logout: 'Logout account', //'Вы вышли из профиля'
+            logout: 'Logout account', // 'Вы вышли из профиля'
             reset: 'Reset',
             reset_password: 'Reset password',
             have_error: 'Have error',
@@ -216,7 +216,7 @@ export default {
             take_number: 'Взять номер', //  Взять номер
             your_numbers: 'Ваши номера', // 'Ваш номер'
             free: 'Свободно номеров', // Свободно
-            lot_finish: 'Лот завершен', //'Лот завершен'
+            lot_finish: 'Лот завершен', // 'Лот завершен'
           },
           auth: {
             account_free: 'Юзернейм свободен', // 'Адрес свободен',
@@ -269,7 +269,7 @@ export default {
             no_have_account: 'Этого аккаунта не существует',
             wrong_code: 'Не верный код',
             code: 'Введите код',
-            logout: 'Вы вышли из профиля', //'Вы вышли из профиля'
+            logout: 'Вы вышли из профиля', // 'Вы вышли из профиля'
             reset_password: 'Сброс пароля',
             have_error: 'Есть ошибки',
             not_login: 'Вы не залогинились'
@@ -335,7 +335,7 @@ export default {
             take_number: 'Take number', //  Взять номер
             your_number: 'Your number', // 'Ваш номер'
             free: 'Miễn phí', // Свободно
-            lot_finish: 'Lot completed', //'Лот завершен'
+            lot_finish: 'Lot completed', // 'Лот завершен'
           },
           auth: {
             username: 'Username',
@@ -384,7 +384,7 @@ export default {
             wrong_code: 'Wrong code',
             code: 'Enter code',
             sign: 'Sign',
-            logout: 'Logout account', //'Вы вышли из профиля'
+            logout: 'Logout account', // 'Вы вышли из профиля'
             reset: 'Reset',
             reset_password: 'Reset password'
           },
