@@ -22,7 +22,7 @@ import {mapMutations, mapActions} from "vuex";
 
 
 export default {
-  name: 'default',
+  name: 'Default',
   data () {
     return {
       timer: null

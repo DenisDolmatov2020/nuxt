@@ -12,7 +12,7 @@
     >
       <v-carousel-item
         v-for="(image, i) in lot.images"
-        :key="i"
+        :key="i + '_' + image.url"
       >
         <v-img
           :src="image.url"
@@ -24,7 +24,7 @@
       <v-row class="pl-4 grey--text">
         {{ lot.title }}
         <v-spacer />
-        <LotIcons :lot="lot" />
+        <LotIcons :lot="lot" :x="2 ** userNumbers.length" />
       </v-row>
     </v-card-title>
 
@@ -38,8 +38,52 @@
       v-if="lot.user"
       :company="lot.user"
       :user-company="$auth.loggedIn && $auth.user.id === lot.user.id"
-      class="mt-12"
     />
+
+    <div v-else-if="!lot.active && lot.wins">
+      <v-card
+        class="mx-auto my-2 pb-2"
+        max-width="400"
+        rounded="xl"
+        color="deep-purple lighten-1"
+      >
+        <v-card-title class="white--text text-lighten-1">
+          {{ $t('detail.winners') }}
+          <v-spacer />
+          <v-btn icon dark large>
+            <v-icon>
+              mdi-comment-question
+            </v-icon>
+          </v-btn>
+        </v-card-title>
+
+        <v-card-text>
+          <v-row>
+            <v-col
+              v-for="winner in lot.wins"
+              :key="`winner_${winner.id}`"
+              cols="2"
+              active-class="deep-purple white--text"
+            >
+              <v-btn
+                icon
+                x-large
+                @click="$router.push({ name: 'profile', params: { user: winner.user }})"
+              >
+                <v-avatar
+                  :rounded="$auth.loggedIn && winner.user.id === $auth.user.id"
+                  :color="$auth.loggedIn && winner.user.id === $auth.user.id ? 'green' : 'blue'"
+                  size="48"
+                  class="white--text"
+                >
+                  #{{ winner.num }}
+                </v-avatar>
+              </v-btn>
+            </v-col>
+          </v-row>
+        </v-card-text>
+      </v-card>
+    </div>
 
     <v-divider class="mx-4" />
 
@@ -48,7 +92,7 @@
         {{ $t('detail.condition') }}
         <v-spacer />
         <v-menu transition="slide-x-reverse-transition">
-          <template v-slot:activator="{ on, attrs }">
+          <template #activator="{ on, attrs }">
             <v-btn
               color="secondary"
               text
@@ -108,6 +152,7 @@
         </div>
       </v-card-text>
     </v-card>
+
     <div v-else-if="!lot.active && lot.wins">
       <v-card
         class="mx-auto my-2 pb-2"
@@ -152,26 +197,13 @@
         </v-card-text>
       </v-card>
     </div>
+
     <v-spacer />
+
     <v-divider class="mx-4" />
-    <v-row v-if="userNumbers.length">
-      <v-col cols="5" class="blue--text text--lighten-1 ml-4">
-        {{ $t('detail.your_numbers') }}
-        <span
-          v-for="number in userNumbers"
-          :key="number.id"
-        >
-          #{{ number.num }},
-        </span>
-        X{{ 2 ** userNumbers.length }}
-      </v-col>
-      <v-spacer />
-      <v-col :class="lot.active ? 'success--text' : 'error--text'">
-        {{ lot.active ? `${$t('detail.free')} ${lot.free_numbers}` : $t('detail.lot_finish') }}
-      </v-col>
-    </v-row>
+
     <button
-      v-else-if="$auth.loggedIn && $auth.user.id !== lot.user.id && lot.active"
+      v-if="$auth.loggedIn && $auth.user.id !== lot.user.id && lot.active"
       type="button"
       class="btn btn-entry btn-lot"
       @click="reserve()"
@@ -182,7 +214,7 @@
 </template>
 
 <script>
-import {mapActions, mapState} from "vuex";
+import {mapState, mapActions} from 'vuex'
 
 export default {
   name: 'Detail',
@@ -201,7 +233,7 @@ export default {
     this.fetchLot()
   },
   methods: {
-    ...mapActions(['fetchLots']),
+    ...mapActions(['fetchLots', 'fetchNumbers']),
     async fetchLot () {
       try {
         const { data } = await this.$axios.get('/api/lot/' + this.$route.params.id)
@@ -219,6 +251,7 @@ export default {
           color: response.status === 200 ? 'success' : 'error'
         })
         this.$auth.fetchUser()
+        this.fetchNumbers()
         this.fetchLot()
         this.fetchLots()
       } catch (error) {

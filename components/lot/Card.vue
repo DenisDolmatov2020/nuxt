@@ -5,6 +5,7 @@
         class="my-12 mx-auto"
         width="400"
         :elevation="hover ? 24 : 3"
+        shaped
         @click="$router.push(`/${lot.id}`)"
       >
         <LotCompany
@@ -15,12 +16,12 @@
           <div class="d-flex flex-no-wrap justify-space-between">
             <div class="title font-weight-light mb-2">
               <v-card-title
-                v-text="lot.title"
                 class="headline"
+                v-text="lot.title"
               />
               <v-card-subtitle
-                v-text="lot.description"
                 class="subheading font-weight-light grey--text"
+                v-text="lot.description"
               />
             </div>
 
@@ -48,18 +49,11 @@
               v-if="!userLot"
               class="text-h6 ml-4 text--lighten-1"
             >
-              <span
-                v-for="number in userNumbers"
-                :key="number.id"
-                class="green--text"
-              >
-                #{{ number.num }},
-              </span>
               <span :class="!userNumbers.length ? 'blue--text' : 'green--text'">
                 X{{ 2 ** userNumbers.length }}
               </span>
             </span>
-            <LotIcons :lot="lot" />
+            <LotIcons :lot="lot" :x="2 ** userNumbers.length" />
           </v-row>
         </v-card-text>
       </v-card>
@@ -83,5 +77,4 @@ export default {
     }
   }
 }
-
 </script>

@@ -5,7 +5,7 @@
     class="mr-4"
   >
     <v-tooltip bottom>
-      <template v-slot:activator="{ on, attrs }">
+      <template #activator="{ on, attrs }">
         <v-icon
           class="mr-1"
           color="pink"
@@ -21,9 +21,9 @@
       <span>Призы</span>
     </v-tooltip>
     <v-tooltip bottom>
-      <template v-slot:activator="{ on, attrs }">
+      <template #activator="{ on, attrs }">
         <span class="subheading mr-2 font-weight-bold indigo--text">
-          {{ props.lot.energy }}
+          {{ props.lot.energy * props.x }}
         </span>
         <v-icon
           color="indigo"
@@ -36,7 +36,7 @@
       <span>Энергия</span>
     </v-tooltip>
     <v-tooltip bottom>
-      <template v-slot:activator="{ on, attrs }">
+      <template #activator="{ on, attrs }">
         <span class="subheading font-weight-bold green--text">
           {{ props.lot.free_numbers ? `${props.lot.players - props.lot.free_numbers}/` : '' }}{{ props.lot.players }}
         </span>

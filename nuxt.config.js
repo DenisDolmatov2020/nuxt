@@ -100,7 +100,6 @@ export default {
             repost: 'Repost',
             winners: 'Winners', // Победитель {{ lot.wins.length === 1 ? 'ь' : 'и' }}
             take_number: 'Take number', // Взять номер
-            your_numbers: 'Your numbers', // 'Ваш номер'
             free: 'Free numbers', // Свободно
             lot_finish: 'Lot completed', // 'Лот завершен'
           },
@@ -214,8 +213,7 @@ export default {
             repost: 'Репост',
             winners: 'Победители', // Победитель {{ lot.wins.length === 1 ? 'ь' : 'и' }}
             take_number: 'Взять номер', //  Взять номер
-            your_numbers: 'Ваши номера', // 'Ваш номер'
-            free: 'Свободно номеров', // Свободно
+            free: 'Свободно', // Свободно
             lot_finish: 'Лот завершен', // 'Лот завершен'
           },
           auth: {

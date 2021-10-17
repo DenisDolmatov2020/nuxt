@@ -1,10 +1,11 @@
 <template functional>
   <v-card
-    class="v-sheet--offset mx-auto"
+    class="mx-auto my-2 pb-2"
     :color="props.userLot ? 'green' : 'blue lighten-1'"
     elevation="12"
     width="calc(100% - 32px)"
     height="80px"
+    shaped
   >
     <v-card-title
       three-line

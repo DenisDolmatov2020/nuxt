@@ -23,7 +23,7 @@
         </v-list-item-content>
       </v-list-item>
 
-      <template v-slot:action="{ attrs }">
+      <template #action="{ attrs }">
         <v-btn
           color="white"
           text
